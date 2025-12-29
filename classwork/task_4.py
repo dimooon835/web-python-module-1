@@ -52,17 +52,17 @@
 # print(d)
 
 
-# d_1 = {"a": 1}
-# d_1.update({"a": 2, "b": 3})
-# d_1.update(c = 4, d = 5)
+d_1 = {"a": 1}
+d_1.update({"a": 2, "b": 3})
+d_1.update(c = 4, d = 5)
 
-# if "e" not in d_1:
-#     print("Ok")
+if "e" not in d_1:
+    print("Ok")
 
-# print(d_1.keys(), d_1.values())
+print(d_1.keys(), d_1.values())
 
-# print(d_1.items())
+print(d_1.items())
 
-# for key, value in d_1.items():
-#     print(f"{key}={value}")
+for key, value in d_1.items():
+    print(f"{key}={value}")
 
