@@ -136,10 +136,6 @@ def process_numbers(numbers):
 
     return sum_negative, sum_even, sum_odd, index_3, index, sum_between
 
-# result = process_numbers(numbers)
-# for key, value in result():
-#     print(f"{key}: {value}")
-
 sum_negative, sum_even, sum_odd, index_3, index, sum_between = process_numbers(numbers)
 
 print(sum_negative)
