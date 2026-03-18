@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional, Dict, List, Tuple
+from typing import Optional, Dict, List
 
 
 stocks = {
@@ -60,15 +60,15 @@ class ReservationRequest:
 
 
 class Warehouse:
-    def __init__(self, warehouse_id: str, products: Dict[str, int]):
+    def __init__(self, warehouse_id, products: Dict[str, int]):
         # TODO: сохранить warehouse_id
         self.warehouse_id = warehouse_id
 
         # TODO: создать отдельную копию словаря products
-        self.products = products.copy()
+        self.products = dict(products)
         
         # TODO: создать список reservations
-        self.reservations = List[ReservationRequest] = []
+        self.reservations: List[ReservationRequest] = []
         pass
 
     def has_sku(self, sku: str) -> bool:
@@ -106,16 +106,16 @@ class Warehouse:
 class ReservationService:
     def __init__(self, stocks: Dict[str, Dict[str, int]]):
         # TODO: создать warehouses вида warehouse_id -> Warehouse(...)
-        self.warehouse = {wid: Warehouse(wid, items) for wid, items in stocks.items()}
+        self.warehouses: Dict[str, Warehouse] = {wid: Warehouse(wid, products) for wid, products in stocks.items()}
 
         # TODO: создать списки accepted и errors
-        self.accepted = List[ReservationRequest] = []
-        self.errors = List[Tuple[str, str, str]] = []
+        self.accepted: List[ReservationRequest] = []
+        self.errors: List[tuple] = []
 
         # TODO: создать множество processed_ids
         self.processed_ids = set()
 
-    def parse_request(self, row: str):
+    def parse_request(self, row: str) -> ReservationRequest:
         # TODO: split по '|'
         parts = row.split('|')
 
@@ -124,22 +124,22 @@ class ReservationService:
             raise RowFormatError(f"Неправильный формат: ожидалось 5 частей")
         
         # TODO: quantity_raw преобразовать в int
-        req_id, client, w_id, sku, qty_raw = parts
+        request_id, client, warehouse_id, sku, quantity_raw = parts
         try:
-            qty = int(qty_raw)
-        except ValueError:
-            raise QuantityError(f"Неправильное кол-во: {qty_raw}")
+            quantity = int(quantity_raw)
+        except:
+            raise RowFormatError(f"Неправильное кол-во: {quantity_raw}")
         
         # TODO: если warehouse_id не существует -> WarehouseNotFoundError
-        if w_id not in self.warehouse:
-            raise WarehouseNotFoundError(f"Warehouse '{w_id}' не существует")
+        if warehouse_id not in self.warehouses:
+            raise WarehouseNotFoundError(f"Warehouse '{warehouse_id}' не существует")
 
         # TODO: если quantity <= 0 -> QuantityError
-        if qty <= 0:
+        if quantity <= 0:
             raise QuantityError(f"Кол-во должно быть больше нуля")
         
         # TODO: вернуть объект ReservationRequest(...)
-        return ReservationRequest(req_id, client, w_id, sku, qty)
+        return ReservationRequest(request_id, client, warehouse_id, sku, quantity)
 
     def submit(self, row: str):
         # TODO: внутри try вызвать parse_request(row)
@@ -151,7 +151,8 @@ class ReservationService:
                 raise DuplicateRequestError(f"Requset ID '{request.request_id}' уже обработан")
         
         # TODO: затем warehouses[request.warehouse_id].reserve(request)
-            self.warehouses[request.warehouse_id].reserve(request)
+            warehouse = self.warehouses[request.warehouse_id]
+            warehouse.reserve(request)
 
         # TODO: после успеха добавить request_id в processed_ids
             self.processed_ids.add(request.request_id)
@@ -161,7 +162,7 @@ class ReservationService:
 
         # TODO: ReservationError сохранить в self.errors как (row, error_type, message)
         except ReservationError as e:
-            self.errors.append((row, e.__class__.__name__, str(e)))
+            self.errors.append((row, type(e).__name__, str(e)))
 
     def load(self, rows: List[str]):
         # TODO: вызвать submit(row) для каждой строки
@@ -170,34 +171,42 @@ class ReservationService:
 
     def client_totals(self) -> Dict[str, int]:
         # TODO: собрать dict вида client -> total_reserved_quantity
-        totals = {}
-        for req in self.accepted:
-            totals[req.client] = totals.get(req.client, 0) + req.quantity
-        return totals
+        result = {}
+        for r in self.accepted:
+            result[r.client] = result.get(r.client, 0) + r.quantity
+        return result
 
-    def top_client(self) -> Optional[Tuple[str, int]]:
+    def top_client(self):
         # TODO: использовать client_totals()
         totals = self.client_totals()
         if not totals:
             return None
-    
+
         # TODO: вернуть tuple(client, total_quantity) с максимумом
         return max(totals.items(), key = lambda x: x[1])
 
-    def lowest_stock_warehouse(self) -> Tuple[str, int]:
+    def lowest_stock_warehouse(self):
         # TODO: найти склад с минимумом total_left()
+        if not self.warehouses:
+            return None
+        w = min(self.warehouses.values(), key = lambda w: w.total_left())
+
         # TODO: вернуть tuple(warehouse_id, total_left)
-        return min([(w.warehouse_id, w.total_left()) for w in self.warehouses.values()], key = lambda x: x[1])
+        return (w.warehouse_id, w.total_left())
 
-    def warehouse_snapshot(self) -> Dict[str, Dict[str, int]]:
+    def warehouse_snapshot(self):
         # TODO: собрать dict вида warehouse_id -> копия текущих остатков products
-        return {wid: w.products.copy() for wid, w in self.warehouses.items()}
+        return {wid: dict(w.products) for wid, w in self.warehouses.items()}
 
-    def find_request(self, request_id) -> Optional[ReservationRequest]:
+    def find_request(self, request_id: str) -> Optional[ReservationRequest]:
         # TODO: вернуть Optional[ReservationRequest]
         # TODO: пройтись по self.accepted и найти нужную заявку
+        for r in self.accepted:
+            if r.request_id == request_id:
+                return r
+            
         # TODO: если не найдено -> вернуть None
-        return next((r for r in self.accepted if r.request_id == request_id), None)
+        return None
 
 
 service = ReservationService(stocks)
@@ -206,12 +215,14 @@ service = ReservationService(stocks)
 service.load(rows)
 
 # TODO: вывести принятые заявки
-print("Принятые заявки: ", [r.request_id for r in service.accepted])
+print("Принятые заявки:")
+for r in service.accepted:
+    print(r)
 
 # TODO: вывести ошибки
 print("\nЖурнал ошибок:")
-for err in service.errors:
-    print(f"Row: {err[0]} | Type: {err[1]} | Msg: {err[2]}")
+for e in service.errors:
+    print(e)
 
 # TODO: вывести warehouse_snapshot()
 print("\nСнимок складов:", service.warehouse_snapshot())
