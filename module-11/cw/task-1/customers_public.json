@@ -1,0 +1,26 @@
+[
+  {
+    "customer_id": "C-101",
+    "name": "Anna",
+    "city": "Moscow",
+    "is_active": false
+  },
+  {
+    "customer_id": "C-102",
+    "name": "Ivan",
+    "city": "Kazan",
+    "is_active": false
+  },
+  {
+    "customer_id": "C-103",
+    "name": "Olga",
+    "city": "Sochi",
+    "is_active": false
+  },
+  {
+    "customer_id": "C-104",
+    "name": "Max",
+    "city": "Perm",
+    "is_active": false
+  }
+]
