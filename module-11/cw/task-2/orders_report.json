@@ -1,0 +1,64 @@
+{
+  "generated_for_module": "serialization_json_pickle",
+  "customers_summary": {
+    "Anna": {
+      "city": "Moscow",
+      "orders_count": 3,
+      "paid_orders_count": 3,
+      "total_spent": 27791.0,
+      "products": [
+        "Keyboard",
+        "Monitor",
+        "Mouse Pad"
+      ]
+    },
+    "Ivan": {
+      "city": "Kazan",
+      "orders_count": 2,
+      "paid_orders_count": 2,
+      "total_spent": 6600.0,
+      "products": [
+        "Mouse",
+        "Webcam"
+      ]
+    },
+    "Olga": {
+      "city": "Sochi",
+      "orders_count": 2,
+      "paid_orders_count": 2,
+      "total_spent": 9001.5,
+      "products": [
+        "Laptop Stand",
+        "Mouse"
+      ]
+    },
+    "Max": {
+      "city": "Perm",
+      "orders_count": 1,
+      "paid_orders_count": 1,
+      "total_spent": 3500.0,
+      "products": [
+        "Keyboard"
+      ]
+    }
+  },
+  "city_summary": {
+    "Moscow": {
+      "orders_count": 3,
+      "paid_revenue": 27791.0
+    },
+    "Kazan": {
+      "orders_count": 2,
+      "paid_revenue": 6600.0
+    },
+    "Sochi": {
+      "orders_count": 2,
+      "paid_revenue": 9001.5
+    },
+    "Perm": {
+      "orders_count": 1,
+      "paid_revenue": 3500.0
+    }
+  },
+  "top_customer": "Anna"
+}
