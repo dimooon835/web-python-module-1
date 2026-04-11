@@ -1,0 +1,56 @@
+{
+  "report_name": "daily_payment_reconciliation",
+  "status_summary": {
+    "matched": 3,
+    "amount_mismatch": 1,
+    "missing_payment": 1
+  },
+  "expected_total": 8170.49,
+  "matched_total": 3789.99,
+  "mismatch_total": 800.5,
+  "reconciliation_results": [
+    {
+      "order_id": "ORD-502",
+      "customer": "Ivan",
+      "expected_amount": 890.5,
+      "paid_amount": 800.5,
+      "status": "amount_mismatch"
+    },
+    {
+      "order_id": "ORD-501",
+      "customer": "Anna",
+      "expected_amount": 1250.0,
+      "paid_amount": 1250.0,
+      "status": "matched"
+    },
+    {
+      "order_id": "ORD-504",
+      "customer": "Max",
+      "expected_amount": 999.99,
+      "paid_amount": 999.99,
+      "status": "matched"
+    },
+    {
+      "order_id": "ORD-505",
+      "customer": "Lena",
+      "expected_amount": 1540.0,
+      "paid_amount": 1540.0,
+      "status": "matched"
+    },
+    {
+      "order_id": "ORD-503",
+      "customer": "Olga",
+      "expected_amount": 3490.0,
+      "paid_amount": 0.0,
+      "status": "missing_payment"
+    }
+  ],
+  "orphan_payments": [
+    {
+      "transaction_id": "TX-9005",
+      "order_id": "ORD-999",
+      "paid_amount": 4200.0,
+      "currency": "RUB"
+    }
+  ]
+}
