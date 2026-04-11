@@ -1,0 +1,92 @@
+{
+  "report_name": "shift_delivery_operations",
+  "deliveries_count": 8,
+  "top_courier": "Nikita",
+  "courier_summary": {
+    "Sergey": {
+      "deliveries_count": 3,
+      "completed_count": 2,
+      "returned_count": 1,
+      "late_count": 1,
+      "total_revenue": 1670.0
+    },
+    "Ira": {
+      "deliveries_count": 3,
+      "completed_count": 2,
+      "returned_count": 1,
+      "late_count": 3,
+      "total_revenue": 1650.9
+    },
+    "Nikita": {
+      "deliveries_count": 2,
+      "completed_count": 2,
+      "returned_count": 0,
+      "late_count": 1,
+      "total_revenue": 4200.9
+    }
+  },
+  "zone_summary": {
+    "center": {
+      "deliveries_count": 2,
+      "late_count": 1,
+      "avg_delay_minutes": 2.5
+    },
+    "north": {
+      "deliveries_count": 3,
+      "late_count": 3,
+      "avg_delay_minutes": 20.33
+    },
+    "south": {
+      "deliveries_count": 2,
+      "late_count": 1,
+      "avg_delay_minutes": 13.5
+    },
+    "west": {
+      "deliveries_count": 1,
+      "late_count": 0,
+      "avg_delay_minutes": 0.0
+    }
+  },
+  "incident_deliveries": [
+    {
+      "delivery_id": "DL-702",
+      "courier": "Ira",
+      "zone": "north",
+      "status": "completed",
+      "delay_minutes": 28,
+      "order_value": 890.5
+    },
+    {
+      "delivery_id": "DL-705",
+      "courier": "Ira",
+      "zone": "north",
+      "status": "completed",
+      "delay_minutes": 27,
+      "order_value": 760.4
+    },
+    {
+      "delivery_id": "DL-706",
+      "courier": "Nikita",
+      "zone": "south",
+      "status": "completed",
+      "delay_minutes": 27,
+      "order_value": 1890.0
+    },
+    {
+      "delivery_id": "DL-708",
+      "courier": "Ira",
+      "zone": "north",
+      "status": "returned",
+      "delay_minutes": 6,
+      "order_value": 1100.0
+    },
+    {
+      "delivery_id": "DL-703",
+      "courier": "Sergey",
+      "zone": "center",
+      "status": "returned",
+      "delay_minutes": 5,
+      "order_value": 540.0
+    }
+  ]
+}
