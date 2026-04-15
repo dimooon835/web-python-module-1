@@ -56,3 +56,22 @@ class ConsoleCartView:
 
 ConsoleCartView.render_cart(["Яблоко", "Кофе"], 330)
 
+
+# Controller
+
+class CartController:
+    def __init__(self, model: CartModel, view: ConsoleCartView):
+        self.model = model
+        self.view = view
+
+    def add_product(self, product_code):
+        try:
+            self.model.add_item(product_code)
+            self.view.render_cart(self.model.item_names(), self.model.total())
+        except ValueError as e:
+            self.view.render_error(str(e))
+
+controller = CartController(CartModel(), ConsoleCartView())
+controller.add_product("Banana")
+controller.add_product("Coffee")
+controller.add_product("Water")
