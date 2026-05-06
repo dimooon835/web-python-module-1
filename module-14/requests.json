@@ -1,0 +1,12 @@
+[
+    {
+        "id": 1,
+        "employee_name": "Д.И.Л",
+        "department": "Бухгалтерия",
+        "equipment_type": "Принтер",
+        "inventory_num": "PR-1023",
+        "problem_desc": "Не печатает документы",
+        "priority": "высокий",
+        "status": "выполнена"
+    }
+]
