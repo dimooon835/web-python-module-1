@@ -120,3 +120,128 @@ returning name, employee_id, budget, is_active
 DELETE FROM projects
 WHERE is_active = false
 returning name, employee_id, budget, is_active
+
+-----------------------------
+
+create table employee_profiles (
+	id serial primary key,
+	employee_id int unique references employees(id),
+	phone text unique,
+	address text,
+	birth_date date
+);
+
+insert into employee_profiles(employee_id, phone, address, birth_date)
+values
+	(1, '+700000000', 'address-1', '1980-05-25'),
+	(2, '+700000001', 'address-2', '1980-05-25'),
+	(3, '+700000002', 'address-3', '1980-05-25');
+
+select
+	e.name as employee_name,
+	ep.phone,
+	ep.address,
+	ep.birth_date
+from employees e
+join employee_profiles ep on ep.employee_id = e.id;
+
+insert into employee_profiles(
+employee_id, phone, address, birth_date)
+values
+	(1, '+700000003', 'address-4', '1995-05-25');
+
+---------------------------------
+
+create table skills (
+	id serial primary key,
+	name text not null unique
+);
+
+create table employee_skills (
+	employee_id int references employees(id),
+	skill_id int references skills(id),
+	primary key (employee_id, skill_id)
+);
+
+insert into skills (name)
+values
+	('SQL'),
+	('PostgreSQL'),
+	('MySQL'),
+	('Excel');
+
+insert into employee_skills (employee_id, skill_id)
+values
+	(1, 1),
+	(2, 1),
+	(3, 1),
+	(1, 2),
+	(2, 2),
+	(3, 2),
+	(1, 4);
+
+select
+	e.name as employee_name,
+	s.name as skills_name
+from employee_skills es
+join employees e on es.employee_id = e.id
+join skills s on es.skill_id = s.id
+order by e.name, s.name;
+
+---------------------------
+
+select
+	e.name as employee_name,
+	e.salary,
+	d.name as department,
+	ep.phone,
+	ep.address,
+	p.name as project_name,
+	s.name as skill_name
+from employees e
+left join departments d on e.id = d.id
+left join employee_profiles ep on e.id = ep.id
+left join projects p on e.id = p.id
+left join employee_skills es on es.employee_id = e.id
+left join skills s on e.id = s.id
+order by e.name, p.name, s.name
+
+----------------------------
+
+select
+	e.name as employee_name,
+	coalesce(sum(p.budget), 0) as total_budget
+from employees e
+left join projects p on e.id = p.id
+group by e.id, e.name
+
+----------------------------
+
+select
+	p.name as project_name,
+	p.budget,
+	e.name as employee_name,
+	d.name as department_name
+from projects p
+join employees e on p.id = e.id
+join departments d on e.id = d.id 
+where p.is_active = true
+	and p.budget > 200000
+	and e.department_id is not null
+order by p.budget desc
+
+-----------------------------
+
+select
+	e.name as emp_name,
+	e.salary,
+	d.name as dep_name,
+	p.name as proj_name,
+	p.budget
+from employees e
+join departments d on e.id = d.id
+join projects p on p.id = e.id
+where e.salary between 90000 and 170000
+	and d.id ('IT', 'HR', 'Finance')
+	and p.is_active = true
+	and p.budget > (select avg(salary) from employees)
